@@ -1,0 +1,18 @@
+#curriculo {
+    height: 100%;
+    width: 100%;
+    background-color: blueviolet;
+    overflow-y: auto;
+    position: relative;
+
+    scrollbar-width: none; 
+}
+
+#curriculo::-webkit-scrollbar {
+    width: 0; /* Remove a barra de rolagem vertical */
+    height: 0; /* Remove a barra de rolagem horizontal */
+}
+
+#curriculo::-webkit-scrollbar {
+    display: none; /* Para garantir compatibilidade */
+}
