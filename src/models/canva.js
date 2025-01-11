@@ -96,8 +96,8 @@ export default function Canva() {
     document.body.appendChild(cssRenderer.domElement);
 
     const reactDiv = document.createElement('div');
-    reactDiv.style.width = '100px';
-    reactDiv.style.height = '100px';
+    //reactDiv.style.width = '100px';
+    //reactDiv.style.height = '100px';
     reactDiv.style.overflow = 'hidden'; // Opcional: controlar o layout interno
 
     document.body.appendChild(reactDiv); // Adiciona ao DOM antes de usar
@@ -110,7 +110,7 @@ export default function Canva() {
     cssObject.visible = false;
     cssObject.scale.set(0.15, 0.1, 0.1);
     scene.add(cssObject);
-    console.log(cssObject.position);
+    console.log(scene.children);
     
     
     const bloomPass = new UnrealBloomPass(
@@ -528,6 +528,7 @@ export default function Canva() {
               break;
           case 'Computer_fireRed_material_0':
               cssObject.visible= true;
+              console.log('APARECA!');
               break;
           default:
               null
@@ -632,8 +633,8 @@ export default function Canva() {
       cancelAnimationFrame(animationId);
       renderer.dispose();
       composer.dispose();
-      cssRenderer.dispose();
       document.body.removeChild(cssRenderer.domElement);
+      cssRenderer.dispose();
       window.removeEventListener('resize', onWindowResize);
       window.removeEventListener( 'pointermove', onPointerMove );
       window.removeEventListener( 'click', onPointerClick );
@@ -642,12 +643,6 @@ export default function Canva() {
 
   return (
     <> 
-      <div id="iframe-PC" ref={iframePCRef}>
-        <Curriculo/>      
-      </div>
-      <div id="iframe-TV" ref={iframeTVRef}>
-        <iframe src="https://www.youtube.com/watch?v=TbBfsrDzHTU" title="Iframe Example"></iframe>
-      </div>
       <canvas id="three-canvas" ref={canvasRef}/>
     </>
   );

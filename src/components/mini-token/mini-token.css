@@ -1,0 +1,16 @@
+
+#token-container span {
+    background-color: #374151;
+    padding: 2px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    font-size: 0.85rem;
+}
+
+#token-container {
+    margin: 0px auto;
+}
+
+.com-mt {
+    margin: 50px auto !important;
+}

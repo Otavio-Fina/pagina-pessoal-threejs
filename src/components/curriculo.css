@@ -1,11 +1,21 @@
 #curriculo {
     height: 100%;
     width: 100%;
-    background-color: blueviolet;
     overflow-y: auto;
     position: relative;
+    display: flex;
+    flex-direction: column; 
+    padding: 0 clamp(5px,18vw, 400px);
+    padding-top: clamp(20px, 10vw, 300px);
+    color: #D1D5DB;
+    line-height: 1.6rem;
+    font-size: 1.2rem;
 
     scrollbar-width: none; 
+}
+
+h1 {
+    margin-bottom: 2vw;
 }
 
 #curriculo::-webkit-scrollbar {
@@ -15,4 +25,190 @@
 
 #curriculo::-webkit-scrollbar {
     display: none; /* Para garantir compatibilidade */
+}
+
+.textos-hero {
+    display: block;
+}
+
+#hero {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    column-gap: 50px;
+    padding: 10vh 0;
+}
+
+.icon-hero {
+    width: 20px;
+    height: 20px;
+}
+
+.icon-hero-check {
+    color: #10B981;
+}
+
+.textos-localizacao {
+    margin-top: 50px;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 10px solid #030712;
+}
+
+.img-minha {
+    width: 300px;
+    height: 300px;
+    box-shadow: 40px 40px 0px rgb(185, 185, 185, 0.3); /* Leve sombra com pouca opacidade */
+}
+
+#about-me {
+    z-index: 1;
+    position: relative;
+    background-color: #111827;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    
+}
+
+.grid-about-me {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 50px;
+    padding: 10vh 0;
+}
+
+.grid-skills {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 50px;
+    padding: 10vh 0;
+}
+
+
+#about-me::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -18vw; /* Ajuste conforme necessário */
+    right: -18vw; /* Ajuste conforme necessário */
+    bottom: 0;
+    background-color: #111827; /* Cor de fundo do container */
+    z-index: -1; /* Coloca o pseudo-elemento atrás do conteúdo */
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+#about-me img {
+    border-color: #111827;
+}
+
+#skills {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+#experience {
+    z-index: 1;
+    position: relative;
+    background-color: #111827;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 100px;
+}
+
+#experience::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -18vw; /* Ajuste conforme necessário */
+    right: -18vw; /* Ajuste conforme necessário */
+    bottom: 0;
+    background-color: #111827; /* Cor de fundo do container */
+    z-index: -1; /* Coloca o pseudo-elemento atrás do conteúdo */
+}
+
+#touch {
+    z-index: 1;
+    position: relative;
+    background-color: #111827;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 100px;
+    border-top: 1px  solid #D1D5DB;
+}
+
+#touch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -18vw; /* Ajuste conforme necessário */
+    right: -18vw; /* Ajuste conforme necessário */
+    bottom: 0;
+    background-color: #111827; /* Cor de fundo do container */
+    z-index: -1; /* Coloca o pseudo-elemento atrás do conteúdo */
+}
+
+.email-div {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center ;
+}
+
+.number-div {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center ;
+}
+
+.email-div * {
+    padding: 10px;
+}
+
+.number-div * {
+    padding: 10px;
+}
+
+.email-div p{
+    margin: 0;
+}
+
+.number-div p{
+    margin: 0;
+}
+
+.copy {
+    border-radius: 5px;
+}
+
+.copy:hover {
+    background-color: rgba(3, 7, 18, 0.3);
+}
+
+.contato * * {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.contato a {
+    padding: 0;
+}
+
+.contato * *:hover {
+    background-color: rgba(3, 7, 18, 0.3);
 }

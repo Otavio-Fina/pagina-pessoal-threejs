@@ -1,0 +1,46 @@
+#experiencia-container {
+    width: 80%;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    background-color: #1F2937;
+    padding: 20px;
+    margin: 30px 0;
+    box-shadow: 10px 10px 15px rgb(3, 7, 18, 0.1);
+}
+
+#experiencia-container img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin: 10px;
+    border: 0px solid #374151;
+    justify-self: start;
+}
+
+#experiencia-container div {
+    justify-self: center;
+}
+
+#experiencia-container p {
+    justify-self: end;
+}
+
+#experiencia-container h2 {
+    margin-bottom: 20px;
+}
+
+
+#experiencia-container ul {
+    list-style-type: disc; 
+    padding-left: 20px;  
+}
+
+#experiencia-container li {
+    list-style-type: inherit; 
+    margin-top: 10px;
+}
+
+#experiencia-container li::marker {
+    font-size: 1rem;
+}
