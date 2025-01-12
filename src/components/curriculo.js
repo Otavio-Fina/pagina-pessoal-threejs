@@ -32,9 +32,12 @@ import tailwind from '../../public/tecnologias/Tailwind CSS.png'
 import vite from '../../public/tecnologias/Vite.js.png'
 import angular from '../../public/tecnologias/Angular.png'
 import ContainerExperiencia from './container-experiencia/container-experiencia'
+import ContainerProjetos from './container-projetos/container-projetos';
 import itau from '../../public/itau.png'
+import countries from '../../public/projetos/countries.png'
 import { faChevronDown, faPhoneVolume, faEnvelopeOpenText, faCopy  } from '@fortawesome/free-solid-svg-icons'; 
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -82,6 +85,10 @@ export default function Curriculo() {
   const handleOnClickCopy = (text) => {
     navigator.clipboard.writeText(text)
   }
+
+  useEffect(() => {
+    gsap.fromTo("#curriculo", { opacity: 0 }, { opacity: 1, duration: 1 });
+  }, [location.href]);
 
   
   return (
@@ -137,7 +144,9 @@ export default function Curriculo() {
       {/* ABAUME */}
       <div id='about-me'>
 
+      <section id='about-me'>
       <MiniToken texto='About Me' mt={true} />
+      </section>
       
       <div className='grid-about-me'>
 
@@ -211,7 +220,9 @@ export default function Curriculo() {
       {/* experience */}
       <div id='experience'>
 
-      <MiniToken texto='Experience' mt={true} />
+      <section id='experience'>
+        <MiniToken texto='Experience' mt={true} />
+      </section>
       
       <p>Here is a quick summary of my most recent experiences:</p>
 
@@ -223,10 +234,30 @@ export default function Curriculo() {
       {/* Fim do experience */}
 
 
+
+      {/* projects */}
+      <div id='projects'>
+      
+      <section id='projects'>
+        <MiniToken texto='Projects' mt={true} />
+      </section>
+
+      <p>Some of the noteworthy projects I have built:</p>
+      
+      <ContainerProjetos img={countries} titulo='Countries API Consumer' 
+      texto="This is a Frontend Mentor challange about build a Countries API Consumer with search methods and diferents themes." 
+      tecnologias={['Bootstrap', 'Postman', 'TypeScript', 'Angular', 'APIs', 'SCSS']}
+      links={{github: 'https://github.com/Otavio-Fina/Rest-Countries-API', live: 'https://rest-countries-api-byotaviofina.vercel.app/'}} />
+        
+      </div>
+
+
       {/* mim toqui */}
       <div id='touch'>
 
-      <MiniToken texto='Get In Touch' mt={true} />
+      <section id='contact'>
+        <MiniToken texto='Get in touch' mt={true} />
+      </section>
       
       <p>What’s next? Feel free to reach out to me if you are looking <br/> for a developer, have a query, or simply want to connect.</p>
 

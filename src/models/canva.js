@@ -15,6 +15,8 @@ import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 import Curriculo from "@/components/curriculo";
 import { createRoot } from "react-dom/client";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
 
 
@@ -30,8 +32,8 @@ export default function Canva() {
   const controlsRef = useRef(null);
   const pointerRef = useRef(null);
   const rootRayRef = useRef(null);
-  const iframePCRef = useRef(null);
   const iframeTVRef = useRef(null);
+  const aparecerOutlineRef = useRef(true);
   const pokemonDeveAparecerRef = useRef(
     {
       'mew': false,
@@ -48,6 +50,7 @@ export default function Canva() {
       'raichu': 'esq'
     }
   );
+  const sairBtnRef = useRef(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -75,18 +78,32 @@ export default function Canva() {
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
 
-    const outlinePass = new OutlinePass(
+    const outlinePassHover = new OutlinePass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
       scene,
       camera
     );
-    outlinePass.edgeStrength = 4;
-    outlinePass.edgeGlow = 0.2;
-    outlinePass.edgeThickness = 1;
-    outlinePass.pulsePeriod = 1.5;
-    outlinePass.visibleEdgeColor.set('#ffffff');
-    outlinePass.hiddenEdgeColor.set('#000000');
-    composer.addPass(outlinePass);
+    outlinePassHover.edgeStrength = 4;
+    outlinePassHover.edgeGlow = 1;
+    outlinePassHover.edgeThickness = 1;
+    outlinePassHover.pulsePeriod = 1;
+    outlinePassHover.visibleEdgeColor.set('#08fc45');
+    outlinePassHover.hiddenEdgeColor.set('#000000');
+    composer.addPass(outlinePassHover);
+
+
+    const outlinePassConstant = new OutlinePass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      scene,
+      camera
+    );
+    outlinePassConstant.edgeStrength = 2;
+    outlinePassConstant.edgeGlow = 0.6;
+    outlinePassConstant.edgeThickness = 0.3;
+    outlinePassConstant.pulsePeriod = 3;
+    outlinePassConstant.visibleEdgeColor.set('#ffffff');
+    outlinePassConstant.hiddenEdgeColor.set('#000000');
+    composer.addPass(outlinePassConstant);
 
     const cssRenderer = new CSS3DRenderer();
     cssRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -96,9 +113,15 @@ export default function Canva() {
     document.body.appendChild(cssRenderer.domElement);
 
     const reactDiv = document.createElement('div');
-    //reactDiv.style.width = '100px';
-    //reactDiv.style.height = '100px';
-    reactDiv.style.overflow = 'hidden'; // Opcional: controlar o layout interno
+    reactDiv.style.width = '1550px'; // Defina a largura da "janela"
+    reactDiv.style.height = '970px'; // Defina a altura da "janela"
+    reactDiv.style.overflowY = 'scroll'; // Ative o scroll vertical
+    reactDiv.style.overflowX = 'hidden'; // Desative o scroll horizontal (opcional)
+    reactDiv.style.border = '2px solid #ccc'; // Adicione um estilo de borda para simular uma janela
+    reactDiv.style.borderRadius = '8px'; // Cantos arredondados (opcional)
+    reactDiv.style.background = '#030712'; // Fundo branco para parecer com uma janela
+    reactDiv.style.padding = '10px'; // Espaço interno (opcional)
+    reactDiv.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)'; // Sombra para efeito de janela
 
     document.body.appendChild(reactDiv); // Adiciona ao DOM antes de usar
 
@@ -106,11 +129,10 @@ export default function Canva() {
     root.render(<Curriculo />); // Renderiza o componente React
 
     const cssObject = new CSS3DObject(reactDiv);
-    cssObject.position.set(-5, 1, 1);
+    cssObject.position.set(-4.3, -0.5, 1);
     cssObject.visible = false;
-    cssObject.scale.set(0.15, 0.1, 0.1);
+    cssObject.scale.set(0.008, 0.008, 0.008);
     scene.add(cssObject);
-    console.log(scene.children);
     
     
     const bloomPass = new UnrealBloomPass(
@@ -367,7 +389,7 @@ export default function Canva() {
     const RamdomParaPokemonAparecer = (poke) => {
       if(!pokemonDeveAparecerRef.current[poke])
       {
-        let random = Math.floor(Math.random() * (360 + 1));
+        let random = Math.floor(Math.random() * (180 + 1));
         if (random == 69)
         {
           pokemonDeveAparecerRef.current[poke] = true
@@ -518,6 +540,44 @@ export default function Canva() {
       }
     }
 
+
+    function animateCssObjectLigar() {
+      // Defina a visibilidade como verdadeira antes de iniciar a animação
+      cssObject.visible = true;
+  
+      // Crie um timeline GSAP
+      const tl = gsap.timeline();
+  
+      // Adicione animações ao timeline
+      tl.fromTo(cssObject.scale, 
+          { x: 0, z: 0 }, // Começa com escala 0
+          { 
+              x: 0.008, 
+              z: 0.008, 
+              duration: 0.5, // Duração da animação
+              ease: "sine.out" 
+          }
+      )
+      .fromTo(reactDiv, 
+          { opacity: 0 }, // Começa com opacidade 0
+          { 
+              opacity: 1, 
+              duration: 0.5, // Duração da animação
+              ease: "sine.in" 
+          }, 
+          0 // Inicia a animação de opacidade ao mesmo tempo que a escala
+      )
+      .fromTo(cssObject.scale, 
+          { y: 0 }, // Começa com opacidade 0
+          { 
+              y: 0.008, 
+              duration: 0.3, // Duração da animação
+              ease: "sine.inOut" 
+          }, 
+          0.1 // Inicia a animação de opacidade ao mesmo tempo que a escala
+      )
+   }
+
     const RevelarIframeAoClick = (object) => {
       switch (object.name) {
           case 'TV_fireRed_material_0':
@@ -527,13 +587,52 @@ export default function Canva() {
               iframeTVRef.current.style.display = 'block';
               break;
           case 'Computer_fireRed_material_0':
-              cssObject.visible= true;
-              console.log('APARECA!');
+              animateCssObjectLigar();
               break;
           default:
               null
       }
     }
+    
+    const handleClickSair = () => {
+      cssObject.visible= false;
+      controls.dampingFactor = true;
+      let oldPosition = new Vector3(0,4,40);
+      let zeroPosition = new Vector3(0,0,0);
+      gsap.to(camera.position, {
+        x: oldPosition.x,
+        y: oldPosition.y,
+        z: oldPosition.z + 1,
+        duration: 1.2,
+        ease: 'power1.inOut',
+        onUpdate: () => {
+          camera.lookAt(zeroPosition); // Mantém o foco no objeto
+          controls.target.copy(zeroPosition); // Atualiza o alvo do OrbitControl
+          controls.update(); // Aplica as mudanças
+        },
+        onComplete: () => {
+          controls.target.copy(zeroPosition); // Garante que o foco seja a posição-alvo no final
+          controls.enabled = true; 
+          controls.update(); // Atualiza o OrbitControls
+          gsap.to(sairBtnRef.current, { opacity: 0, duration: 0.3, delay: 0.2 });
+          window.addEventListener( 'click', onPointerClick );
+          aparecerOutlineRef.current = true;
+        },
+      });
+  
+      // Atualizar o OrbitControls após a animação
+      gsap.to(controls.target, {
+        x: zeroPosition.x,
+        y: zeroPosition.y,
+        z: zeroPosition.z,
+        duration: 1.2,
+        ease: 'sine.inOut',
+      });
+
+
+    }
+
+    document.getElementById('btnSair').addEventListener('click', handleClickSair);
 
     const onPointerClick = ( event ) => {
       pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -557,7 +656,7 @@ export default function Canva() {
           y: targetPosition.y,
           z: targetPosition.z + 1,
           duration: 1.2,
-          ease: 'power2.out',
+          ease: 'sine.inOut',
           onUpdate: () => {
             camera.lookAt(targetPosition); // Mantém o foco no objeto
             controls.target.copy(targetPosition); // Atualiza o alvo do OrbitControl
@@ -568,6 +667,9 @@ export default function Canva() {
             controls.enabled = false; // Desativa os controles
             controls.update(); // Atualiza o OrbitControls
             RevelarIframeAoClick(clickedObject);
+            gsap.to(sairBtnRef.current, { opacity: 1, duration: 0.3, delay: 0.2 });
+            window.removeEventListener('click', onPointerClick);
+            aparecerOutlineRef.current = false;
           },
         });
     
@@ -577,7 +679,7 @@ export default function Canva() {
           y: targetPosition.y,
           z: targetPosition.z,
           duration: 1.2,
-          ease: 'power2.out',
+          ease: 'sine.inOut',
         });
       }
     }
@@ -592,11 +694,13 @@ export default function Canva() {
       const intersects = raycaster.intersectObjects(filteredObjectsParaIntersect, false);
 
       //condicional para voltar ao original apos mouseoff
-      if (intersects.length > 0) {
+      if (intersects.length > 0 && aparecerOutlineRef.current) {
         const intersectedObject = intersects[0].object;
-        outlinePass.selectedObjects = [intersectedObject];
+        outlinePassHover.selectedObjects = [intersectedObject];
+        outlinePassConstant.selectedObjects = [];
       }  else { // Destaca o objeto atualmente intersectado
-        outlinePass.selectedObjects = []; // Substitua pelo original
+        outlinePassHover.selectedObjects = []; // Substitua pelo original
+        aparecerOutlineRef.current ? outlinePassConstant.selectedObjects = filteredObjectsParaIntersect : outlinePassConstant.selectedObjects = [];
       }
 
       const delta = clock.getDelta();
@@ -634,7 +738,7 @@ export default function Canva() {
       renderer.dispose();
       composer.dispose();
       document.body.removeChild(cssRenderer.domElement);
-      cssRenderer.dispose();
+      document.getElementById('btnSair').removeEventListener('click', handleClickSair);
       window.removeEventListener('resize', onWindowResize);
       window.removeEventListener( 'pointermove', onPointerMove );
       window.removeEventListener( 'click', onPointerClick );
@@ -643,8 +747,13 @@ export default function Canva() {
 
   return (
     <> 
+      <button ref={sairBtnRef} id="btnSair"><FontAwesomeIcon icon={faCircleXmark} /></button>
       <canvas id="three-canvas" ref={canvasRef}/>
     </>
   );
 } 
+
+
+
+
 

@@ -1,13 +1,18 @@
+'use client';
 import './portfolio.css';
 import Curriculo from "@/components/curriculo";
-import * as THREE from 'three';
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Home() {
 
   
+
+
+  
   return (
-    <div id="portfolio-container" style={{ width: '100%', height: '100%' }}>
-      <Curriculo />
-    </div>
+      <div id="portfolio-container" style={{ width: '100%', height: '100%' }}>
+        <Curriculo />
+      </div>
   );
 }

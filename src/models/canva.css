@@ -24,4 +24,17 @@
     height: 100%;
     width: 100%;
 }
+button {
+    position: absolute;
+    top: 70px;
+    right: 40px;
+    width: 40px;
+    height: 40px;
+    z-index: 3;
+    color: #181c24;
+    font-size: 4rem;
+    opacity: 0;
+}
+
+
 
