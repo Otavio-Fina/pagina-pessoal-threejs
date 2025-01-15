@@ -37,11 +37,79 @@ import itau from '../../public/itau.png'
 import countries from '../../public/projetos/countries.png'
 import { faChevronDown, faPhoneVolume, faEnvelopeOpenText, faCopy  } from '@fortawesome/free-solid-svg-icons'; 
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Curriculo() {
+
+  const minhaImg1 = useRef(null);
+  const minhaImg2 = useRef(null);
+  const linhaQueVaiEVolta = useRef(null);
+  const linhaQueVaiEVolta2 = useRef(null);
+
+  const handleMouseEnterImgPerfil = (tag) => {
+    gsap.to(tag, { boxShadow: "0px 0px 0px rgb(185, 185, 185, 0.3)", duration: 0.2, ease: "power2.inOut" });
+  }
+
+  const handleMouseOutImgPerfil = (tag) => {
+    gsap.to(tag, { boxShadow: "40px 40px 0px rgb(185, 185, 185, 0.3)", duration: 0.2, ease: "power2.inOut" });
+  }
+
+  useEffect(() => {
+    const img1 = minhaImg1.current;
+    const img2 = minhaImg2.current;
+
+    img1.addEventListener("mouseenter", () => handleMouseEnterImgPerfil(img1));
+    img1.addEventListener("mouseout", () => handleMouseOutImgPerfil(img1));
+    img2.addEventListener("mouseenter", () => handleMouseEnterImgPerfil(img2));
+    img2.addEventListener("mouseout", () => handleMouseOutImgPerfil(img2));
+
+    // Cleanup
+    return () => {
+      img1.removeEventListener("mouseenter", () => handleMouseEnterImgPerfil(img1));
+      img1.removeEventListener("mouseout", () => handleMouseOutImgPerfil(img1));
+      img2.removeEventListener("mouseenter", () => handleMouseEnterImgPerfil(img2));
+      img2.removeEventListener("mouseout", () => handleMouseOutImgPerfil(img2));
+    };
+  }, []);
+
+  useEffect(() => {
+    //const tl = gsap.timeline({repeat: -1, repeatDelay: 1, yoyo: true});
+
+
+        const applyAnimacaoVaiEVolta = (obj , delay) => {
+          const tl = gsap.timeline({repeat: -1, repeatDelay: delay, yoyo: true});
+          tl.set(obj, { transformOrigin: "left center" })
+        .fromTo(obj, { scaleX: 0}, {
+            scaleX: 1,
+            duration: 0.5,
+            ease: 'sine.in',
+        })
+        .set(obj, { transformOrigin: "right center" })
+        .fromTo(obj, {scaleX: 1},{
+          scaleX: 0, 
+          duration: 0.5, 
+          ease: "sine.out", 
+      })
+      .set(obj, { transformOrigin: "right center" })
+      .fromTo(obj,{scaleX: 0}, {
+          scaleX: 1,
+          duration: 0.5, 
+          ease: "sine.out",
+      }) 
+      .set(obj, { transformOrigin: "left center" })
+        .fromTo(obj, {scaleX: 1},{
+            scaleX: 0,
+            duration: 0.5,
+            ease: 'sine.in',
+        })
+        }
+
+        applyAnimacaoVaiEVolta(linhaQueVaiEVolta.current, 1);
+        applyAnimacaoVaiEVolta(linhaQueVaiEVolta2.current, 1.5);
+
+  }, []);
 
   const  tecnologias = [
     {img: html5, nome: 'HTML5'},
@@ -51,7 +119,7 @@ export default function Curriculo() {
     {img: tailwind, nome: 'Tailwind'},
     {img: javascript, nome: 'JavaScript'},
     {img: typescript, nome: 'TypeScript'},
-    {img: angular, nome: 'Angularr'},
+    {img: angular, nome: 'Angular'},
     {img: jest, nome: 'Jest'},
     {img: react, nome: 'React'},
     {img: redux, nome: 'Redux'},
@@ -62,7 +130,7 @@ export default function Curriculo() {
     {img: three, nome: 'Three.js'},
     {img: aws, nome: 'AWS'},
     {img: csharp, nome: 'C#'},
-    {img: core, nome: 'NET core'},
+    {img: core, nome: '.NET core'},
     {img: swagger, nome: 'Swagger'},
     {img: git, nome: 'Git'},
     {img: actions, nome: 'GitHub Actions'},
@@ -89,7 +157,6 @@ export default function Curriculo() {
   useEffect(() => {
     gsap.fromTo("#curriculo", { opacity: 0 }, { opacity: 1, duration: 1 });
   }, [location.href]);
-
   
   return (
     
@@ -133,7 +200,7 @@ export default function Curriculo() {
           </div>
           
         </div>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 1.01 }} className='img-minha'>
+        <motion.div ref={minhaImg1} whileHover={{ scale: 1.05 }} whileTap={{ scale: 1.01 }} className='img-minha'>
             <Image src={profile} alt='minha foto pessoal' ></Image>
         </motion.div>
       </div>
@@ -150,7 +217,7 @@ export default function Curriculo() {
       
       <div className='grid-about-me'>
 
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 1.01 }} className='img-minha'>
+        <motion.div ref={minhaImg2} whileHover={{ scale: 1.05 }} whileTap={{ scale: 1.01 }} className='img-minha'>
               <Image src={profile} alt='minha foto pessoal' ></Image>
         </motion.div>
           <div className='textos-hero'>
@@ -186,7 +253,15 @@ export default function Curriculo() {
               Aspiring indie hacker
               </p>
               <p>
-              One last thing, I'm available for freelance work, so feel free to reach out and say hello! I promise I don't bite 😉
+              One last thing, I'm available for freelance work, so feel free to reach out and say hello! I promise I don't bite <motion.span
+              className='inline-block'
+              animate={{ rotate: [-20, 20, -20]}} 
+              transition={{
+                duration: 1, // Duração de um ciclo
+                repeat: Infinity, // Repetição infinita
+                repeatType: "loop", // Faz loop
+                ease: "easeInOut",
+              }}>😉</motion.span>
               </p>
             </div>
             
@@ -226,9 +301,9 @@ export default function Curriculo() {
       
       <p>Here is a quick summary of my most recent experiences:</p>
 
-      <ContainerExperiencia img={itau} titulo='Itau Fullstack intern' textosListados={textosParaExperiencias.estagio} tempo='Oct 2023 - Jan 2025'></ContainerExperiencia>
+      <ContainerExperiencia img={itau} titulo='Itau Fullstack Intern' textosListados={textosParaExperiencias.estagio} tempo='Oct 2023 - Jan 2025' linkParaEmpresa='https://www.linkedin.com/company/itau/posts/?feedView=all'></ContainerExperiencia>
       <FontAwesomeIcon icon={faChevronDown} />
-      <ContainerExperiencia img={itau} titulo='Itau Junior Front-End Developer' textosListados={textosParaExperiencias.junior} tempo='Jan 2025 - Present'></ContainerExperiencia>
+      <ContainerExperiencia img={itau} titulo='Itau Junior Front-End Developer' textosListados={textosParaExperiencias.junior} tempo='Jan 2025 - Present'  linkParaEmpresa='https://www.linkedin.com/company/itau/posts/?feedView=all'></ContainerExperiencia>
         
       </div>
       {/* Fim do experience */}
@@ -263,26 +338,32 @@ export default function Curriculo() {
 
       <div className='email-div'>
         <FontAwesomeIcon icon={faEnvelopeOpenText} />
-        <p className='text-2xl lg:text-3xl font-bold text-white'>
-          otaviofina@gmail.com
-        </p>
-        <FontAwesomeIcon icon={faCopy} className='copy' onClick={handleOnClickCopy('otaviofina@gmail.com')}/>
+        <div>
+          <p className='text-2xl lg:text-3xl font-bold text-white'>
+            otaviofina@gmail.com
+          </p>
+          <div className='vai-e-volta' ref={linhaQueVaiEVolta}></div>
+        </div>
+        <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} style={{padding:0}}><FontAwesomeIcon icon={faCopy} className='copy' onClick={handleOnClickCopy('otaviofina@gmail.com')}/></motion.div>
       </div>
       <div className='number-div'>
-        <FontAwesomeIcon icon={faPhoneVolume} />
-        <p className='text-2xl lg:text-3xl font-bold text-white'>
-          +55 11 970547222
-        </p>
-        <FontAwesomeIcon icon={faCopy} className='copy' onClick={handleOnClickCopy('+55 11 970547222')}/>
+      <FontAwesomeIcon icon={faPhoneVolume} />
+        <div>
+          <p className='text-2xl lg:text-3xl font-bold text-white'>
+            +55 11 970547222
+          </p>
+          <div className='vai-e-volta' ref={linhaQueVaiEVolta2}></div>
+        </div>
+        <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} style={{padding:0}}><FontAwesomeIcon icon={faCopy} className='copy' onClick={handleOnClickCopy('+55 11 970547222')}/></motion.div>
       </div>
 
       <p style={{fontSize: '0.9rem'}}>You may also find me on these platforms!</p>
       <div className='email-div contato'>
         <a href="https://github.com/Otavio-Fina" target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faGithub} />
+          <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} style={{padding:0}}><FontAwesomeIcon icon={faGithub} /></motion.div>
         </a>
         <a href="https://linkedin.com/in/otavio-fina" target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faLinkedinIn} />
+          <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} style={{padding:0}}><FontAwesomeIcon icon={faLinkedinIn} /></motion.div>
         </a>
       </div>
 

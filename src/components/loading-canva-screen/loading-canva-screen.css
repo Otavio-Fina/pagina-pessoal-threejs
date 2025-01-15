@@ -1,0 +1,53 @@
+#loading-canva-screen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #030712;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Garantir que o conteúdo esteja no centro */
+    padding: 0;
+}
+
+#be-creative {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #030712;
+    display: flex;
+    justify-content: center; /* Alinhar o conteúdo no centro */
+    align-items: center; /* Alinhar o conteúdo no centro */
+    flex-direction: column;
+    padding: 0;
+}
+
+#be-creative p {
+    font-family: "beCreative2";
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Garantir que o texto dentro do p esteja centrado */
+    font-size: 5rem; /* Ajuste o tamanho conforme necessário */
+    background: linear-gradient(90deg, rgba(14,49,106,1) 0%, rgba(255,85,233,1) 60%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap; /* Impedir que o texto quebre em várias linhas */
+    line-height: 1; /* Ajuste o line-height para garantir que a altura do texto não cause corte */
+}
+
+#be-creative p * {
+    display: inline-block; /* Mantenha os caracteres como elementos inline */
+    font-size: 5rem; /* Ajuste o tamanho conforme necessário */
+    line-height: 1; /* Garanta que o line-height seja consistente para cada letra */
+}
+
+.gradient-char {
+    font-size: 5rem; /* Garantir que o tamanho do caractere seja o mesmo */
+    display: inline-block; /* Necessário para animação */
+    background: linear-gradient(90deg, rgba(14,49,106,1) 0%, rgba(255,85,233,1) 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative; /* Essencial para animar */
+    line-height: 1; /* Manter a altura das letras consistente */
+    transform-origin: center; /* Garantir que o movimento aconteça de forma centralizada */
+}

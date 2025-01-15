@@ -17,6 +17,8 @@ import Curriculo from "@/components/curriculo";
 import { createRoot } from "react-dom/client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
+import LoadingCanvaScreen from "@/components/loading-canva-screen/loading-canva-screen";
+import SplitType from 'split-type';
 
 
 
@@ -164,8 +166,74 @@ export default function Canva() {
     controls.maxDistance = 42; 
     controlsRef.current = controls;
 
+
+
+    const loadingManager = new THREE.LoadingManager();
+
+    loadingManager.onLoad = function() {
+        const loadingDiv = document.getElementById('loading-canva-screen');
+        const BeCreativeDiv = document.getElementById('be-creative');
+        const textElement = BeCreativeDiv.querySelector('p'); 
+        const char = BeCreativeDiv.querySelector('.gradient-char'); 
+        const splitText = new SplitType(textElement, { type: "chars" }); 
+        splitText.chars.forEach(char => {
+          char.classList.add('gradient-char');
+      });
+        loadingDiv.style.opacity = '1';
+        BeCreativeDiv.style.opacity = '1';
+
+        const tl = gsap.timeline();
+
+        // Fade out the loading screen
+        tl.fromTo(loadingDiv.style, { opacity: 1 }, {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'sine.inOut',
+            onComplete: () => {
+                loadingDiv.style.display = 'none'; // Hide loading screen
+            },
+        })
+        .to(splitText.chars, {
+          y: -20, // Move up
+          duration: 0.3, // Duration of the upward motion
+          stagger: {
+              amount: 0.5, // Total stagger duration
+              from: 'left' // Start stagger from the left
+          },
+          ease: "sine.out", // Smooth easing for upward motion
+      }, "+=0.3")
+      .to(splitText.chars, {
+          y: 0, // Move back down
+          duration: 0.3, // Duration of the downward motion
+          stagger: {
+              amount: 0.5, // Total stagger duration
+              from: 'left', // Same direction as upward animation
+              each: 0.1 // Start descending shortly after ascending
+          },
+          ease: "sine.in", // Smooth easing for downward motion
+      }, "-=0.53") // Overlap the downward motion with the upward motion
+        // Fade out Be Creative div after loading screen
+        .fromTo(BeCreativeDiv.style, { opacity: 1 }, {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'sine.inOut',
+            onComplete: () => {
+                BeCreativeDiv.style.display = 'none'; // Hide Be Creative div
+            },
+        }, "=+0.5")
+    };
+
+    loadingManager.onProgress = function(item, loaded, total) {
+        console.log(`Carregando: ${item}, Carregado: ${loaded} de ${total}`);
+    };
+
+    // Função chamada quando um erro ocorre
+    loadingManager.onError = function(url) {
+        console.error(`Erro ao carregar: ${url}`);
+    };
+
     // Loader do modelo
-    const loaderSky = new GLTFLoader();
+    const loaderSky = new GLTFLoader(loadingManager);
     loaderSky.load(
       '/assets/sky.glb',
       (glb) => {
@@ -199,7 +267,7 @@ export default function Canva() {
       return { z: eixoZ, y: eixoY };
     };
 
-    const loaderQuarto = new GLTFLoader();
+    const loaderQuarto = new GLTFLoader(loadingManager);
     loaderQuarto.load(
       '/assets/pokemon_firered_-_players_room.glb',
       (glb) => {
@@ -229,7 +297,7 @@ export default function Canva() {
 
 
 
-    const loaderMew = new GLTFLoader();
+    const loaderMew = new GLTFLoader(loadingManager);
     loaderMew.load(
       '/assets/mew_-_flying_comp.glb',
       (glb) => {
@@ -256,7 +324,7 @@ export default function Canva() {
       }
     );
 
-    const loaderRay = new GLTFLoader();
+    const loaderRay = new GLTFLoader(loadingManager);
     loaderRay.load(
       '/assets/rayquaza_comp.glb',
       (glb) => {
@@ -283,7 +351,7 @@ export default function Canva() {
       }
     );
 
-    const loaderCharizard = new GLTFLoader();
+    const loaderCharizard = new GLTFLoader(loadingManager);
     loaderCharizard.load(
       '/assets/charizard_comp.glb',
       (glb) => {
@@ -310,7 +378,7 @@ export default function Canva() {
       }
     );
 
-    const loaderRaichu = new GLTFLoader();
+    const loaderRaichu = new GLTFLoader(loadingManager);
     loaderRaichu.load(
       '/assets/raichu_comp.glb',
       (glb) => {
@@ -547,7 +615,7 @@ export default function Canva() {
   
       // Crie um timeline GSAP
       const tl = gsap.timeline();
-  
+      reactDiv.style.opacity = '0';
       // Adicione animações ao timeline
       tl.fromTo(cssObject.scale, 
           { x: 0, z: 0 }, // Começa com escala 0
@@ -558,7 +626,7 @@ export default function Canva() {
               ease: "sine.out" 
           }
       )
-      .fromTo(reactDiv, 
+      .fromTo(reactDiv.style, 
           { opacity: 0 }, // Começa com opacidade 0
           { 
               opacity: 1, 
@@ -746,9 +814,11 @@ export default function Canva() {
   }, []);
 
   return (
-    <> 
+    <>
+      <LoadingCanvaScreen/>
       <button ref={sairBtnRef} id="btnSair"><FontAwesomeIcon icon={faCircleXmark} /></button>
       <canvas id="three-canvas" ref={canvasRef}/>
+
     </>
   );
 } 

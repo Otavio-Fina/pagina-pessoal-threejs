@@ -63,6 +63,10 @@
     margin-left: 1px;
 }
 
+.link-projetos div {
+    display: inline-block;
+}
+
 .link-projetos a {
     padding: 0;
 }
@@ -74,4 +78,17 @@
 
 .link-projetos a *:hover {
     background-color: rgba(3, 7, 18, 0.3);
+}
+
+#projetos-container #token-container {
+    margin: 0;
+}
+
+
+@media screen and (max-width: 1000px) {
+    #projetos-container {
+
+        grid-template-columns: 1fr;
+
+    }
 }
