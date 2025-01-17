@@ -34,7 +34,7 @@ export default function Canva() {
   const controlsRef = useRef(null);
   const pointerRef = useRef(null);
   const rootRayRef = useRef(null);
-  const iframeTVRef = useRef(null);
+  const iframeRef = useRef(null);
   const aparecerOutlineRef = useRef(true);
   const pokemonDeveAparecerRef = useRef(
     {
@@ -594,7 +594,7 @@ export default function Canva() {
       let position = new Vector3(0,0,0);
       switch (object.name) {
           case 'TV_fireRed_material_0':
-              position = new Vector3(0.4, 0, 2.7);
+              position = new Vector3(0.4, -0.04, 2.7);
               return position;
           case 'NES_fireRed_material_0':
               position = new Vector3(0.4, 0, 2.7);
@@ -649,13 +649,16 @@ export default function Canva() {
     const RevelarIframeAoClick = (object) => {
       switch (object.name) {
           case 'TV_fireRed_material_0':
-              iframeTVRef.current.style.display = 'block';
+              cssObject.position.set(0.5, -1, 1);
+              animateCssObjectLigar();
               break;
           case 'NES_fireRed_material_0':
-              iframeTVRef.current.style.display = 'block';
+              iframeRef.current.style.display = 'block';
               break;
           case 'Computer_fireRed_material_0':
+              cssObject.position.set(-4.3, -0.5, 1);
               animateCssObjectLigar();
+              
               break;
           default:
               null
@@ -664,6 +667,7 @@ export default function Canva() {
     
     const handleClickSair = () => {
       cssObject.visible= false;
+      iframeRef.current.style.display = 'none';
       controls.dampingFactor = true;
       let oldPosition = new Vector3(0,4,40);
       let zeroPosition = new Vector3(0,0,0);
@@ -712,7 +716,6 @@ export default function Canva() {
       if (intersects.length > 0)
       {
         const clickedObject = intersects[0].object;
-        //clickedObject.material.color.set(0x00ff00);
 
         const targetPosition =  GetPositionObject(clickedObject);
 
@@ -816,6 +819,18 @@ export default function Canva() {
   return (
     <>
       <LoadingCanvaScreen/>
+      <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube-nocookie.com/embed/1MOjNA7I98g?controls=0&start=1&autoplay=1&mute=1"
+      title="YouTube video player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerPolicy="strict-origin-when-cross-origin"
+      allowFullScreen
+      id="iframe-TV"
+      ref={iframeRef}
+    ></iframe>
       <button ref={sairBtnRef} id="btnSair"><FontAwesomeIcon icon={faCircleXmark} /></button>
       <canvas id="three-canvas" ref={canvasRef}/>
 
