@@ -154,7 +154,9 @@ export default function Curriculo() {
   }
 
   const handleOnClickCopy = (text) => {
-    navigator.clipboard.writeText(text)
+    if (typeof window !== 'undefined' && navigator?.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
   }
 
   useEffect(() => {
