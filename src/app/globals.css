@@ -49,12 +49,7 @@ a {
   }
 }
 
-@font-face {
-  font-family: 'BeCreative';
-  src: url('/fonts/beCreative.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
+
 
 @font-face {
   font-family: 'BeCreative2';
@@ -63,17 +58,4 @@ a {
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'BeCreative3';
-  src: url('/fonts/beCreative3.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'BeCreative4';
-  src: url('/fonts/beCreative4.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
 

@@ -20,7 +20,19 @@ import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import LoadingCanvaScreen from "@/components/loading-canva-screen/loading-canva-screen";
 import SplitType from 'split-type';
 
-
+function IframeVideo(){
+  return(
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/1MOjNA7I98g?controls=0&start=1&autoplay=1&mute=1"
+      title="YouTube video player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerPolicy="strict-origin-when-cross-origin"
+      allowFullScreen
+      id="iframe-TV"
+    ></iframe>
+  )
+}
 
 export default function Canva() {
   const canvasRef = useRef(null);
@@ -113,28 +125,55 @@ export default function Canva() {
     cssRenderer.domElement.style.top = '0';
     cssRenderer.domElement.style.left = '0';
     document.body.appendChild(cssRenderer.domElement);
-
+    
+    // Cria o primeiro reactDiv
     const reactDiv = document.createElement('div');
-    reactDiv.style.width = '1550px'; // Defina a largura da "janela"
-    reactDiv.style.height = '970px'; // Defina a altura da "janela"
-    reactDiv.style.overflowY = 'scroll'; // Ative o scroll vertical
-    reactDiv.style.overflowX = 'hidden'; // Desative o scroll horizontal (opcional)
-    reactDiv.style.border = '2px solid #ccc'; // Adicione um estilo de borda para simular uma janela
-    reactDiv.style.borderRadius = '8px'; // Cantos arredondados (opcional)
-    reactDiv.style.background = '#030712'; // Fundo branco para parecer com uma janela
-    reactDiv.style.padding = '10px'; // Espaço interno (opcional)
-    reactDiv.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)'; // Sombra para efeito de janela
-
-    document.body.appendChild(reactDiv); // Adiciona ao DOM antes de usar
-
-    const root = createRoot(reactDiv); // Cria a raiz React
-    root.render(<Curriculo />); // Renderiza o componente React
-
+    reactDiv.style.width = '1550px';
+    reactDiv.style.height = '970px';
+    reactDiv.style.overflowY = 'scroll';
+    reactDiv.style.overflowX = 'hidden';
+    reactDiv.style.border = '2px solid #ccc';
+    reactDiv.style.borderRadius = '8px';
+    reactDiv.style.background = '#030712';
+    reactDiv.style.padding = '10px';
+    reactDiv.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
+    reactDiv.className = 'old-tv-effect';
+    
+    document.body.appendChild(reactDiv);
+    
+    const root = createRoot(reactDiv); // Cria a raiz React para reactDiv
+    root.render(<Curriculo />);
+    
     const cssObject = new CSS3DObject(reactDiv);
     cssObject.position.set(-4.3, -0.5, 1);
     cssObject.visible = false;
     cssObject.scale.set(0.008, 0.008, 0.008);
     scene.add(cssObject);
+    
+    // Cria o segundo reactDiv para o iframe
+    const reactDivIframe = document.createElement('div');
+    reactDivIframe.style.width = '1300px';
+    reactDivIframe.style.height = '970px';
+    reactDivIframe.style.overflowY = 'scroll';
+    reactDivIframe.style.overflowX = 'hidden';
+    reactDivIframe.style.border = '2px solid #ccc';
+    reactDivIframe.style.borderRadius = '8px';
+    reactDivIframe.style.background = '#030712';
+    reactDivIframe.style.padding = '10px';
+    reactDivIframe.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
+    reactDivIframe.className = 'old-tv-effect';
+    
+    document.body.appendChild(reactDivIframe);
+    
+    // Cria a raiz React para reactDivIframe e renderiza o componente <IframeVideo>
+    const rootIframe = createRoot(reactDivIframe); // Nova raiz React para o segundo div
+    rootIframe.render(<IframeVideo />);
+    
+    const cssObjectIframe = new CSS3DObject(reactDivIframe);
+    cssObjectIframe.position.set(-4.3, -0.5, 1);
+    cssObjectIframe.visible = false;
+    cssObjectIframe.scale.set(0.008, 0.008, 0.008);
+    scene.add(cssObjectIframe);
     
     
     const bloomPass = new UnrealBloomPass(
@@ -156,6 +195,11 @@ export default function Canva() {
     controls.enableDamping = true; //suavizaçao
     controls.dampingFactor = 1; //(valor padrão é 0.05)
     controls.rotateSpeed = -0.25;
+    controls.minAzimuthAngle = -Math.PI / 8; // Limita a rotação horizontal a -22,5°
+    controls.maxAzimuthAngle = Math.PI / 8; // Limita a rotação horizontal a +22,5°
+
+    controls.minPolarAngle = Math.PI / 2.3; // Limita a rotação vertical a (mano sla kk) acima do horizonte
+    controls.maxPolarAngle = Math.PI / 1.95; // Limita a rotação vertical a ~~ 90° (direção z para baixo)
     controls.keys = {
       LEFT: 'ArrowLeft', 
       UP: 'ArrowUp', 
@@ -486,8 +530,7 @@ export default function Canva() {
                   }
                 direcaoQueOPokeVaiAparecerRef.current['mew'] == 'esq' ? rootMewRef.current.position.x -= 0.07 : rootMewRef.current.position.x += 0.07
                 rootMewRef.current.position.y += Math.sin( clock.getElapsedTime() ) * 0.02;
-                //rootMewRef.current.rotation.y += Math.sin( clock.getElapsedTime() ) * 0.003;
-                rootMewRef.current.rotation.y += Math.sin( clock.getElapsedTime() ) * 0.1;
+                rootMewRef.current.rotation.y += Math.sin( clock.getElapsedTime() ) * 0.003;
               }
           }
           break;
@@ -646,6 +689,42 @@ export default function Canva() {
       )
    }
 
+   function animateCssObjectLigarIframe() {
+    cssObjectIframe.visible = true;
+
+    // Crie um timeline GSAP
+    const tl = gsap.timeline();
+    reactDiv.style.opacity = '0';
+    // Adicione animações ao timeline
+    tl.fromTo(cssObjectIframe.scale, 
+        { x: 0, z: 0 }, // Começa com escala 0
+        { 
+            x: 0.008, 
+            z: 0.008, 
+            duration: 0.5, // Duração da animação
+            ease: "sine.out" 
+        }
+    )
+    .fromTo(reactDivIframe.style, 
+        { opacity: 0 }, // Começa com opacidade 0
+        { 
+            opacity: 1, 
+            duration: 0.5, // Duração da animação
+            ease: "sine.in" 
+        }, 
+        0 // Inicia a animação de opacidade ao mesmo tempo que a escala
+    )
+    .fromTo(cssObjectIframe.scale, 
+        { y: 0 }, // Começa com opacidade 0
+        { 
+            y: 0.008, 
+            duration: 0.3, // Duração da animação
+            ease: "sine.inOut" 
+        }, 
+        0.1 // Inicia a animação de opacidade ao mesmo tempo que a escala
+    )
+ }
+
     const RevelarIframeAoClick = (object) => {
       switch (object.name) {
           case 'TV_fireRed_material_0':
@@ -653,7 +732,8 @@ export default function Canva() {
               animateCssObjectLigar();
               break;
           case 'NES_fireRed_material_0':
-              iframeRef.current.style.display = 'block';
+              cssObjectIframe.position.set(0.5, -1.5, 1);
+              animateCssObjectLigarIframe();
               break;
           case 'Computer_fireRed_material_0':
               cssObject.position.set(-4.3, -0.5, 1);
@@ -667,7 +747,8 @@ export default function Canva() {
     
     const handleClickSair = () => {
       cssObject.visible= false;
-      iframeRef.current.style.display = 'none';
+      cssObjectIframe.visible = false;
+      //iframeRef.current.style.display = 'none';
       controls.dampingFactor = true;
       let oldPosition = new Vector3(0,4,40);
       let zeroPosition = new Vector3(0,0,0);
@@ -819,18 +900,6 @@ export default function Canva() {
   return (
     <>
       <LoadingCanvaScreen/>
-      <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube-nocookie.com/embed/1MOjNA7I98g?controls=0&start=1&autoplay=1&mute=1"
-      title="YouTube video player"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerPolicy="strict-origin-when-cross-origin"
-      allowFullScreen
-      id="iframe-TV"
-      ref={iframeRef}
-    ></iframe>
       <button ref={sairBtnRef} id="btnSair"><FontAwesomeIcon icon={faCircleXmark} /></button>
       <canvas id="three-canvas" ref={canvasRef}/>
 
